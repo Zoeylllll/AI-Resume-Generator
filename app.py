@@ -4,7 +4,7 @@ import streamlit as st
 from core.generator import polish_resume_text
 from core.translator import translate_text
 from core.exporter import export_to_pdf, export_to_docx
-from config.config.lang_texts import LANG_TEXTS
+from config.lang_texts import LANG_TEXTS
 
 st.set_page_config(page_title="AI Resume Generator", page_icon="🧠")
 
