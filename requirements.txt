@@ -1,0 +1,6 @@
+streamlit
+openai
+python-dotenv
+deep-translator
+fpdf
+python-docx
