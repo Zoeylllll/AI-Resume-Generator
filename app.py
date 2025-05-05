@@ -29,13 +29,6 @@ template_map = {
 }
 template_code = template_map[template]
 
-# 风格预览图
-template_images = {
-    "tech": "static/template_tech.png",
-    "business": "static/template_business.png",
-    "academic": "static/template_academic.png"
-}
-st.image(template_images[template_code], caption=f"{template} 风格预览", use_column_width=True)
 
 # 目标语言
 target_language = st.selectbox(texts["select_language"], ["英文", "中文", "韩文"])
