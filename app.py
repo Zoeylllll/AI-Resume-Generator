@@ -5,6 +5,9 @@ from core.generator import polish_resume_text
 from core.translator import translate_text
 from core.exporter import export_to_pdf, export_to_docx
 from config.lang_texts import LANG_TEXTS
+from core.history import save_resume_history
+save_resume_history(text_input, target_lang, template_code)
+from core.email_sender import send_email
 
 st.set_page_config(page_title="AI Resume Generator", page_icon="🧠")
 
@@ -76,3 +79,27 @@ if st.button("📝 导出为 Word (.docx)"):
                     file_name=word_filename,
                     mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                 )
+if st.checkbox("📜 查看历史记录"):
+    with open("resume_history.json", "r", encoding="utf-8") as f:
+        records = json.load(f)
+        for r in records[-5:][::-1]:
+            st.markdown(f"**{r['timestamp']} | 模板：{r['template']} | 语言：{r['lang']}**")
+            st.code(r["content"])
+
+with st.expander("📩 发送简历到邮箱"):
+    email_input = st.text_input("输入接收邮箱地址")
+    if st.button("📤 一键发送 PDF 简历"):
+        if email_input and text_input:
+            pdf_filename = export_to_pdf(text_input, template_code)
+            send_email(email_input, pdf_filename)
+            st.success("✅ 邮件已发送成功！")
+        else:
+            st.warning("请先填写邮箱或输入简历内容。")
+
+            
+template_images = {
+    "tech": "static/template_tech.png",
+    "business": "static/template_business.png",
+    "academic": "static/template_academic.png"
+}
+st.image(template_images[template_code], caption=f"{template} 风格预览", use_column_width=True)
