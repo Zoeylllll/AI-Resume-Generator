@@ -1,12 +1,14 @@
+# app.py
+
 import streamlit as st
 from core.generator import polish_resume_text
 from core.translator import translate_text
-from core.exporter import export_to_pdf
-from config.lang_texts import LANG_TEXTS
+from core.exporter import export_to_pdf, export_to_docx
+from config.config.lang_texts import LANG_TEXTS
 
 st.set_page_config(page_title="AI Resume Generator", page_icon="🧠")
 
-# 设置界面语言
+# 设置 UI 语言
 language = st.selectbox("🌐 Select UI Language / 선택할 언어:", ["中文", "English", "한국어"])
 lang_map = {"中文": "zh", "English": "en", "한국어": "ko"}
 lang_code = lang_map[language]
@@ -14,10 +16,10 @@ texts = LANG_TEXTS[lang_code]
 
 st.title(texts["title"])
 
-# 简历内容输入
+# 简历原文输入
 text_input = st.text_area(texts["input_placeholder"], height=300)
 
-# 简历风格选择（模板切换）
+# 简历风格选择
 template = st.selectbox(texts["select_template"], ["技术风格", "商务风格", "学术风格"])
 template_map = {
     "技术风格": "tech",
@@ -31,7 +33,7 @@ target_language = st.selectbox(texts["select_language"], ["英文", "中文", "�
 target_lang_map = {"英文": "en", "中文": "zh", "韩文": "ko"}
 target_lang = target_lang_map[target_language]
 
-# 智能润色按钮
+# 一键润色
 if st.button(texts["polish_button"]):
     if text_input.strip():
         with st.spinner(texts["spinner_polish"]):
@@ -39,7 +41,7 @@ if st.button(texts["polish_button"]):
             st.success("✅ Done!")
             st.text_area("🎯 润色结果：", result, height=300)
 
-# 翻译按钮
+# 一键翻译
 if st.button(texts["translate_button"]):
     if text_input.strip():
         with st.spinner(texts["spinner_translate"]):
@@ -47,7 +49,7 @@ if st.button(texts["translate_button"]):
             st.success("✅ Done!")
             st.text_area("🎯 翻译结果：", result, height=300)
 
-# 导出 PDF 按钮
+# 导出 PDF
 if st.button(texts["export_button"]):
     if text_input.strip():
         with st.spinner(texts["spinner_export"]):
@@ -61,6 +63,7 @@ if st.button(texts["export_button"]):
                     mime="application/pdf"
                 )
 
+# 导出 Word
 if st.button("📝 导出为 Word (.docx)"):
     if text_input.strip():
         with st.spinner("正在生成 Word 文件..."):
